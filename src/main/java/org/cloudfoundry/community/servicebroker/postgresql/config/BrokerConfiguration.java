@@ -46,6 +46,9 @@ public class BrokerConfiguration {
     @Value("${MASTER_JDBC_URL}")
     private String jdbcUrl;
 
+    @Value("${FREE_PLAN}")
+    private static String freePlan;
+
     @Bean
     public Connection jdbc() {
         try {
@@ -90,8 +93,10 @@ public class BrokerConfiguration {
     }
 
     private static List<Plan> getPlans() {
+        boolean isFreePlan = freePlan != null && !freePlan.isEmpty();
         Plan basic = new Plan("postgresql-basic-plan", "Basic PostgreSQL Plan",
-                "A PG plan providing a single database on a shared instance with limited storage.", getBasicPlanMetadata());
+                "A PG plan providing a single database on a shared instance with limited storage.",
+                getBasicPlanMetadata(), isFreePlan);
         return Arrays.asList(basic);
     }
 
